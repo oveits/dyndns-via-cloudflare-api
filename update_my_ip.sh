@@ -10,7 +10,7 @@ if [ "$NAME" == "" ]; then
   exit 1
 fi
 
-SLEEP=60
+[ "$SLEEP" == "" ] && SLEEP=60
 
 # output: e.g. 1.2.3.4
 
@@ -33,10 +33,11 @@ while (true); do
 
   #output: e.g. 828...588
 
-  [ "$IP" != "" ] \
-  && [ "$IP_ENTRY" != "" ] \
-  && [ "$IP" != "$IP_ENTRY" ] \
-  && curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$ZONE/dns_records/$ID"  \
+  if [ "$IP" == "" ] || [ "$IP_ENTRY" == "" ]; then
+    echo "could not find my IP address or the CloudFlare address; is the Internet connection broken? Trying again in $SLEEP seconds"
+  else
+    [ "$IP" != "$IP_ENTRY" ] \
+    && curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$ZONE/dns_records/$ID"  \
 	  -H "X-Auth-Email: $EMAIL" \
 	  -H "X-Auth-Key: $GLOBAL_API_KEY" \
 	  -H "Content-Type: application/json" \
@@ -47,6 +48,7 @@ while (true); do
           "ttl":120,
           "priority":10,
           "proxied":false}' || echo "IP address has not changed; skipping. Checking again in $SLEEP seconds"
+  fi
 
   # output: e.g.
   # {"result":{"id":"828...588","type"
