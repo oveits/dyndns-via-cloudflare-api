@@ -5,7 +5,11 @@ source $HOME/.cloudflare/credentials
 # EMAIL=your_email@example.com
 # GLOBAL_API_KEY=your_global_api_key
 
-[ "$NAME" == "" ] && NAME=ganesh.vocon-it.com
+if [ "$NAME" == "" ]; then
+  echo "usage: NAME=your-dns-name.example.com bash $0"
+  exit 1
+fi
+
 SLEEP=60
 
 # output: e.g. 1.2.3.4
