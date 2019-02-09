@@ -5,7 +5,7 @@ source $HOME/.cloudflare/credentials
 # EMAIL=your_email@example.com
 # GLOBAL_API_KEY=your_global_api_key
 
-NAME=ganesh.vocon-it.com
+[ "$NAME" == "" ] && NAME=ganesh.vocon-it.com
 SLEEP=60
 
 # output: e.g. 1.2.3.4
