@@ -15,7 +15,8 @@ fi
 # output: e.g. 1.2.3.4
 
 while (true); do
-  IP=$(curl -4 -s ifconfig.co); 
+  # what is my IP address? Some services havw shown sproadic failures, so I check with two independent services:
+  IP=$(curl --fail -4 -s https://ipinfo.io/ip || curl -4 -s ifconfig.co)
   
   echo "My public IP is: $IP"
   
